@@ -1,0 +1,47 @@
+version: '3'
+services:
+  app:
+    container_name: cim-app
+    build:
+      context: .
+      dockerfile: app-dockerfile
+    ports:
+      - 8081:80
+    depends_on:
+      - web
+  web:
+    container_name: cim-web
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - SPRING_DATASOURCE_URL=jdbc:mysql://cim-mysql:3306/copdmanagedb?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    build:
+      context: .
+      dockerfile: web-dockerfile
+    working_dir: /web
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+    command: mvn clean spring-boot:run -Dspring-boot.run.profiles=prod
+  mysql:
+    container_name: cim-mysql
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: copdmanagedb
+      MYSQL_ROOT_PASSWORD: copdmanagedb
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - 3306:3306
+    restart: always
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+  nginx:
+    container_name: cim-nginx
+    restart: always
+    build:
+      context: .
+      dockerfile: nginx-dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - app
+      - web
