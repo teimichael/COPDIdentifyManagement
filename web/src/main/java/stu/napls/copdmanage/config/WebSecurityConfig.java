@@ -22,6 +22,7 @@ import stu.napls.copdmanage.core.security.provider.CustomAuthenticationProvider;
 import stu.napls.copdmanage.core.security.service.CustomUserDetailsService;
 
 import javax.annotation.Resource;
+import java.net.InetAddress;
 import java.util.Arrays;
 
 /**
@@ -99,7 +100,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(new CustomAuthenticationProvider(customUserDetailsService, new BCryptPasswordEncoder()));
     }
 
-    private StaticHeadersWriter getCorsHeader() {
+    private StaticHeadersWriter getCorsHeader() throws Exception {
         return new StaticHeadersWriter(Arrays.asList(
                 new Header("Access-control-Allow-Origin", cors.getFrontAppUrl()),
                 new Header("Access-Control-Allow-Credentials", "true"),

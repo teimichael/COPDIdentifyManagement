@@ -6,6 +6,6 @@ docker rm cim-app
 docker rm cim-web
 docker rm cim-nginx
 docker rm cim-mysql
-docker rmi copdidentifymanage_app
-docker rmi copdidentifymanage_web
-docker rmi copdidentifymanage_nginx
+docker rmi copdidentifymanagement_app
+docker rmi copdidentifymanagement_web
+docker rmi copdidentifymanagement_nginx
